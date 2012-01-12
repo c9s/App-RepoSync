@@ -66,7 +66,6 @@ sub traverse_dir {
 
 sub run {
     my ($class,$sync_root) = @_;
-
     $sync_root = realpath($sync_root);
 
     my @repos = traverse_dir $sync_root, sub { 
