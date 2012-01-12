@@ -2,101 +2,28 @@
 use 5.10.0;
 use strict;
 use warnings;
-use YAML;
-use JSON;
-use File::Spec;
-use File::Find::Rule;
 use File::Basename;
+use lib dirname(dirname(__FILE__)) . '/lib';
 use Cwd;
+use App::RepoSync::Export;
+use YAML;
+
+my ($export_file,@dirs) = @ARGV;
 
 
-sub traverse_dir {
-    my ($dir,$cb) = @_;
-    opendir(my $dh, $dir ) || die "can't opendir $dir: $!";
-    my @result;
-    my @dirs = readdir $dh;
-    for my $subdir ( @dirs ) {
-        my $abspath = File::Spec->join( $dir, $subdir );
-        next if $subdir eq '.' || $subdir eq '..' ;
-        my $path = $cb->( $subdir, $dir );
-        next if $path && $path == -1;
-        if( $path ) {
-            push @result, $path;
-        }
-        else {
-            push @result, traverse_dir( $abspath , $cb) if -d $abspath;
-        }
-    }
-    closedir $dh;
-    return @result;
+die 'export file is required' unless $export_file;
+
+@dirs = getcwd() unless @dirs;
+
+say 'scanning repos...';
+my @data = ();
+for( @dirs ) {
+    my @repos = App::RepoSync::Export->run( $_ );
+    push @data, @repos;
 }
 
-my $sync_root = getcwd();
-my $repository_data = { };
-
-my @svn_repos = traverse_dir $sync_root, sub { 
-    my ($subdir,$parent) = @_;
-    return if $subdir =~ /^\./; # do not descent
-    return if ! -d File::Spec->join($parent,$subdir);
-    if( File::Spec->join( $parent, $subdir , '.svn' ) ) {
-        my $svn_dir = File::Spec->join( $parent , $subdir );
-
-        chdir $svn_dir;
-        my $info;
-        unless( $info = qx(LC_ALL=C svn info 2> /dev/null ) ) {
-            warn 'SVN info failed';
-
-            # if uprade is needed,
-            my $ret = qx(LC_ALL=C svn info 2>&1);
-            if ($ret =~ /svn upgrade/) {
-                say "SVN upgrade $svn_dir";
-                # qx(svn upgrade);
-            }
-        }
-
-        unless( $info = qx(LC_ALL=C svn info 2> /dev/null ) ) {
-            return -1;
-        }
-
-        my ($name) = basename($svn_dir);
-        my ($url) = ($info =~ m{URL: (\S+)});
-        my ($revision) = ($info =~ m{Revision: (\S+)});
-        return { 
-            type => 'svn',
-            path => $svn_dir,
-            name => $name,
-            url => $url,
-            revision => $revision,
-        };
-        chdir $sync_root;
-    }
-};
-
-
-my @git_repos = traverse_dir $sync_root, sub { 
-    my ($subdir,$parent) = @_;
-    return if $subdir =~ /^\./; # do not descent
-    return if ! -d File::Spec->join($parent,$subdir);
-    if( File::Spec->join( $parent, $subdir , '.git' ) ) {
-        my $git_dir = File::Spec->join( $parent , $subdir );
-
-        chdir $git_dir;
-
-        split /\n/,qx(git remote -v);
-
-#         my ($name) = basename($git_dir);
-#         my ($url) = ($info =~ m{URL: (\S+)});
-#         my ($revision) = ($info =~ m{Revision: (\S+)});
-#         return { 
-#             type => 'git',
-#             path => $git_dir,
-#             name => $name,
-#             url => $url,
-#             revision => $revision,
-#         };
-        chdir $sync_root;
-    }
-};
-
-
-# say Dump \@svn_repos;
+YAML::DumpFile( $export_file , {
+    version => 0.1,
+    repos => \@data,
+});
+say 'done';
