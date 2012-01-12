@@ -35,13 +35,10 @@ sub system_or_die {
     my $dumped_core = $q & 128;
 
 
-
-
     if ($q != -1 &&  (($q & 127) == 2) && (!($q & 128))) { 
         # Drop the "$? & 128" if you want to include failures that generated coredump
         die color('yellow') ,"$command: interrupted" , color 'reset';
-    }
-    else( $q == 0 ) {
+    } elsif( $q == 0 ) {
         print color 'red';
         print "$description failed: $?\n";
         print color 'reset';
