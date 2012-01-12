@@ -133,6 +133,7 @@ sub run {
             my $cfg = Config::Tiny->read($config_path);
             my $paths = $cfg->{paths};
             my $branch = qx(hg branch);
+            chomp( $branch );
             chdir $sync_root;
             return {
                 type     => 'hg',
