@@ -13,15 +13,22 @@ __END__
 
 =head1 NAME
 
-App::RepoSync -
+App::RepoSync - an application that helps you import,export,sync repositories.
 
 =head1 SYNOPSIS
 
-  use App::RepoSync;
+Export repository mapping into a YAML file:
+
+    $ repo export [yaml file] [dirs ...]
+
+Import repository mapping into a YAML file:
+
+    $ repo import [yaml file]
 
 =head1 DESCRIPTION
 
-App::RepoSync is
+App::RepoSync is an application helps you import, export, sync
+Git,SVN,git-svn,Mercurial repositories.
 
 =head1 AUTHOR
 

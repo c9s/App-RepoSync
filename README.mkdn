@@ -1,6 +1,6 @@
 # NAME
 
-App::RepoSync - An application helps you import,export,sync repositories.
+App::RepoSync - an application that helps you import,export,sync repositories.
 
 # SYNOPSIS
 
@@ -14,8 +14,8 @@ Import repository mapping into a YAML file:
 
 # DESCRIPTION
 
-App::RepoSync is an application helps you import,export,sync
-Git,SVN,git-svn,Mercurial repositories
+App::RepoSync is an application helps you import, export, sync
+Git,SVN,git-svn,Mercurial repositories.
 
 # AUTHOR
 

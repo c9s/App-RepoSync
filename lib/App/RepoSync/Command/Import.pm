@@ -4,6 +4,7 @@ use warnings;
 use strict;
 use base qw( CLI::Framework::Command );
 use File::Path qw(mkpath);
+use Try::Tiny;
 use Cwd;
 use YAML;
 use App::RepoSync::Export;
@@ -37,13 +38,14 @@ sub run {
                 my $url = $repo->{url};
                 if ( -e $path ) {
                     say "svn: updating $path from $url";
+
                     system_or_die("svn update $svn_opts --trust-server-cert --non-interactive $path",
-                        "svn update");
+                            "svn update");
                 }
                 else {
                     say "svn: checking out $url into $path";
                     system_or_die("svn checkout $svn_opts --trust-server-cert --non-interactive $url $path",
-                        "svn checkout");
+                            "svn checkout");
                 }
             }
             when('git') { 
@@ -53,6 +55,7 @@ sub run {
                 if( -e $path ) {
                     say "git: updating $path";
                     say "git: remote update and prune";
+
                     system_or_die("git remote update --prune",'git remote update',$path);
 
                     # should we update current working copy ?
@@ -83,13 +86,10 @@ sub run {
                     say "git-svn: checking out $url into $path";
                     system_or_die("git svn clone $url $path","checkout svn through git-svn");
                 }
-
             }
         }
     }
-
     say "done. @{[ scalar @{ $data->{repos} } ]} repositories imported.";
 }
-
 
 1;
