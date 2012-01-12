@@ -87,6 +87,20 @@ sub run {
                     system_or_die("git svn clone $url $path","checkout svn through git-svn");
                 }
             }
+            when('hg') {
+                my $path = $repo->{path};
+                my $url = $repo->{url};
+
+                if( -e $path ) {
+                    say "hg: updating $path";
+                    system_or_die("hg update","hg update",$path);
+                }
+                else {
+                    say "hg: checking out $url into $path";
+                    system_or_die("hg clone $url $path","hg clone");
+                }
+
+            }
         }
     }
     say "done. @{[ scalar @{ $data->{repos} } ]} repositories imported.";

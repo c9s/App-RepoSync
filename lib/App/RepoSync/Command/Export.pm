@@ -22,6 +22,7 @@ sub run {
         push @data, @repos;
     }
 
+    say "writing $export_file...";
     YAML::DumpFile( $export_file , {
         version => 0.1,
         repos => \@data,

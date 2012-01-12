@@ -8,6 +8,8 @@ use JSON;
 use File::Spec;
 use File::Find::Rule;
 use File::Basename;
+use Config::Tiny;
+use App::RepoSync::SystemUtil qw(system_or_die chdir_qx);
 
 sub parse_svn_info {
     my $cmd = shift || 'svn info';
@@ -19,7 +21,7 @@ sub parse_svn_info {
         my $ret = qx(LC_ALL=C $cmd 2>&1);
         if ($cmd eq 'svn info' && $ret =~ /svn upgrade/) {
             say "svn: try upgrading: " . getcwd;
-            system('svn upgrade 2>&1 > /dev/null');
+            system_or_die('svn upgrade 2>&1 > /dev/null');
         }
     }
 
@@ -126,10 +128,19 @@ sub run {
         elsif( -d File::Spec->join( $path , '.hg' ) ) {
             chdir $path;
 
-
+            # try to read .hg/hgrc
+            my $config_path = File::Spec->join( $path, '.hg', 'hgrc' );
+            my $cfg = Config::Tiny->read($config_path);
+            my $paths = $cfg->{paths};
+            my $branch = qx(hg branch);
             chdir $sync_root;
-
-            return -1;
+            return {
+                type     => 'hg',
+                path     => $subpath,
+                url      => $paths->{default} || $paths->{'default-push'},
+                branch   => $branch,
+                remotes  => $paths,
+            };
         }
         return;
     };
