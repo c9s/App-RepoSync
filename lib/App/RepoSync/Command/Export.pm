@@ -7,14 +7,12 @@ use Cwd;
 use YAML;
 use App::RepoSync::Export;
 
-
 sub run {
     my ($self,$opts,@args) = @_;
 
     my ($export_file,@dirs) = @args;
 
     $export_file ||= 'repos.yml';
-
     @dirs = getcwd() unless @dirs;
 
     say 'scanning repos...';

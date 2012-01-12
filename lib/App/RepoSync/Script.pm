@@ -2,6 +2,7 @@ package App::RepoSync::Script;
 use warnings;
 use strict;
 use App::RepoSync::Command::Export;
+use App::RepoSync::Command::Import;
 use base qw( CLI::Framework );
 
 sub option_spec {
