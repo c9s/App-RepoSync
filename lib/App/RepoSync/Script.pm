@@ -14,8 +14,6 @@ sub usage_text { qq{
     $0 [--verbose|v]
 
     OPTIONS
-        --db [path]  : path to SQLite database file
-        -v --verbose : be verbose
         -h --help    : show help
 
     COMMANDS
@@ -36,8 +34,6 @@ sub command_map {
 
 sub init {
     my ($self, $opts,$command) = @_;
-
-
     return 1;
 }
 
