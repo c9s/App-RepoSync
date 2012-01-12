@@ -2,10 +2,10 @@ use inc::Module::Install;
 name 'App-RepoSync';
 all_from 'lib/App/RepoSync.pm';
 
-requires 'CLI::Framework';
+requires map { $_ => 0 } qw(CLI::Framework File::Basename File::Spec YAML JSON);
 readme_markdown_from_pod 'lib/App/RepoSync.pm';
 tests 't/*.t';
-scripts 'scripts/repo';
+install_script 'scripts/repo';
 # author_tests 'xt';
 # test_requires 'Test::More';
 # auto_set_repository;
