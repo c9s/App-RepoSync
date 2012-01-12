@@ -2,7 +2,7 @@ use inc::Module::Install;
 name 'App-RepoSync';
 all_from 'lib/App/RepoSync.pm';
 
-# requires '';
+requires 'CLI::Framework';
 readme_markdown_from_pod 'lib/App/RepoSync.pm';
 tests 't/*.t';
 scripts 'scripts/repo';
