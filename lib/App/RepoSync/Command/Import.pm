@@ -93,11 +93,11 @@ sub run {
 
                 if( -e $path ) {
                     say "hg: updating $path";
-                    system_or_die("hg update","hg update",$path);
+                    system_or_die("hg update","hg update --quiet",$path);
                 }
                 else {
                     say "hg: checking out $url into $path";
-                    system_or_die("hg clone $url $path","hg clone");
+                    system_or_die("hg clone --quiet $url $path","hg clone");
                 }
 
             }
