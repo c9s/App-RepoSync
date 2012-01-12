@@ -34,7 +34,6 @@ lib/App/RepoSync/Export.pm
 lib/App/RepoSync/Script.pm
 lib/App/RepoSync/SystemUtil.pm
 scripts/repo
-t/00_compile.t
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t
