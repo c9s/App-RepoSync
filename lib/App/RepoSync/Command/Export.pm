@@ -20,10 +20,13 @@ sub run {
     say 'scanning repos...';
     my @data = ();
     for( @dirs ) {
+        say "scanning $_";
         chdir $cwd;
         my @repos = App::RepoSync::Export->run( $_ );
         push @data, @repos;
     }
+
+    chdir $cwd;
 
     say "writing $export_file...";
     YAML::DumpFile( $export_file , {
