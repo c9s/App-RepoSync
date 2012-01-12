@@ -17,7 +17,6 @@ sub run {
     $export_file ||= 'repos.yml';
     @dirs = getcwd() unless @dirs;
 
-    say 'scanning repos...';
     my @data = ();
     for( @dirs ) {
         say "scanning $_";
