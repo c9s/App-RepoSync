@@ -10,6 +10,7 @@ use File::Find::Rule;
 use File::Basename;
 use Config::Tiny;
 use App::RepoSync::SystemUtil qw(system_or_die chdir_qx);
+use Term::ANSIColor;
 
 sub parse_svn_info {
     my $cmd = shift || 'svn info';
