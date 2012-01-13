@@ -1,0 +1,29 @@
+# NAME
+
+App::RepoSync - an application that helps you import,export,sync repositories.
+
+# SYNOPSIS
+
+Export repository mapping into a YAML file:
+
+    $ repo export [yaml file] [dirs ...]
+
+Import repository mapping into a YAML file:
+
+    $ repo import [yaml file]
+
+# DESCRIPTION
+
+App::RepoSync is an application helps you import, export, sync
+Git,SVN,git-svn,Mercurial repositories.
+
+# AUTHOR
+
+Yo-An Lin <cornelius.howl {at} gmail.com>
+
+# SEE ALSO
+
+# LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
