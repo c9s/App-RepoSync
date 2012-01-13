@@ -67,7 +67,7 @@ sub traverse_dir {
 
 sub run {
     my ($class,$export_root) = @_;
-    $sync_root = getcwd();
+    my $sync_root = getcwd();
     my @repos = traverse_dir $export_root, sub { 
         my ($subdir,$parent) = @_;
         my $path = File::Spec->join( $parent, $subdir );
