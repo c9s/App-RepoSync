@@ -18,11 +18,11 @@ sub option_spec {
 }
 
 sub info {
-    print (color 'green'), @_ , ( color 'reset') , "\n";
+    print color('green'), @_ , color('reset') , "\n";
 }
 
 sub warning {
-    print (color 'red'), @_ , (color 'reset') , "\n";
+    print color('red'), @_ , color('reset') , "\n";
 }
 
 sub run {
