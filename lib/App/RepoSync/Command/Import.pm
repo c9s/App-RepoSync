@@ -31,10 +31,11 @@ sub run {
 
     my $back_dir = getcwd();
 
-    my $verbose = $opts->{verbose};
-    my $svn_opts = $verbose ? qq() : qq(-q);
-    my $git_opts = $verbose ? qq(--verbose) : qq(--quiet);
+    my $verbose      = $opts->{verbose};
+    my $svn_opts     = $verbose ? qq() : qq(-q);
+    my $git_opts     = $verbose ? qq(--verbose) : qq(--quiet);
     my $git_svn_opts = $verbose ? qq() : qq(--quiet);
+    my $hg_opts      = $verbose ? qq() : qq(--quiet);
 
     my $data = YAML::LoadFile $import_file;
 
@@ -90,10 +91,10 @@ sub run {
 
                 if( -e $path ) {
                     info "git-svn: updating $path";
-                    system_or_die("git svn rebase --fetch-all -q $git_svn_opts --fetch-all");
+                    system_or_die("git svn rebase $git_svn_opts --fetch-all");
                 } else {
                     info "git-svn: checking out $url into $path";
-                    system_or_die("git svn clone -q $url $path","checkout svn through git-svn");
+                    system_or_die("git svn clone $git_svn_opts $url $path","checkout svn through git-svn");
                 }
             }
             when('hg') {
@@ -102,11 +103,11 @@ sub run {
 
                 if( -e $path ) {
                     info "hg: updating $path";
-                    system_or_die("hg update","hg update --quiet",$path);
+                    system_or_die("hg update","hg update $hg_opts",$path);
                 }
                 else {
                     info "hg: checking out $url into $path";
-                    system_or_die("hg clone --quiet $url $path","hg clone");
+                    system_or_die("hg clone $hg_opts $url $path","hg clone");
                 }
 
             }
