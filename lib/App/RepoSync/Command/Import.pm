@@ -102,8 +102,13 @@ sub run {
                 my $url = $repo->{url};
 
                 if( -e $path ) {
+                    chdir $path;
+                    my $dirty = qx(hg diff);
+                    chdir $back_dir;
+                    next if $dirty;
+
                     info "hg: updating $path";
-                    system_or_die("hg update","hg update $hg_opts",$path);
+                    system_or_die("hg pull","hg pull $hg_opts",$path);
                 }
                 else {
                     info "hg: checking out $url into $path";
